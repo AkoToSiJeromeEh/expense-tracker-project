@@ -3,11 +3,22 @@ import { reminderSchema } from "../schemas";
 import { BsCalendar2Date } from "react-icons/bs";
 import { CiMoneyBill } from "react-icons/ci";
 import { TfiWrite } from "react-icons/tfi";
+import  axios  from "axios";
+import ToggleState from "../hooks/ToggleState";
+
+//api/reminders/updateReminder/:id
 
 const Addreminder = () => {
-  const onSubmit = (actions) => {
-    actions.resetForm();
+  const [showSuccessText , setShowSuccessText] = ToggleState()
+  const onSubmit = async(values ) => {
+    const response = await axios.post('http://localhost:3000/api/reminders/createReminder' , values);
+    setShowSuccessText(true)
+    setTimeout(() => {
+      setShowSuccessText(false)
+    }, 5000);
     console.log("submitted");
+    console.log(response)
+
   };
   const {
     values,
@@ -19,11 +30,10 @@ const Addreminder = () => {
     isSubmitting,
   } = useFormik({
     initialValues: {
-      reminderid: "",
-      remindertitle: "",
-      remindercontent: "",
-      reminderprice: "",
-      reminderdate: "",
+      title: "",
+      content: "",
+      price: "",
+      date: "",
     },
     validationSchema: reminderSchema,
     onSubmit,
@@ -31,74 +41,75 @@ const Addreminder = () => {
   return (
     <div className="self-start w-[70%] mx-auto">
       <form
-      onSubmit={handleSubmit}
-        action="/addreminder"
+        onSubmit={handleSubmit}
         method="post"
         className="flex flex-col gap-8 items-start justify-start w-full"
       >
-        <input type="number" name="reminderid" hidden value={values.reminderid} />
+
         <div className="text-center w-full">
           <p className="text-4xl mb-5">Add Reminder</p>
           <input
-           className={errors.remindertitle && touched.remindertitle ?  'border-2 border-red-500 bg-white p-6 rounded-full w-64 add-exp-input text-center text-black' : 'bg-white p-6 rounded-full w-64 add-exp-input text-center text-black'}
+           className={errors.title && touched.title ?  'border-2 border-red-500 bg-white p-6 rounded-full w-64 add-exp-input text-center text-black' : 'bg-white p-6 rounded-full w-64 add-exp-input text-center text-black'}
             type="text"
             placeholder="Title"
-            name="remindertitle"
+            name="title"
             onBlur={handleBlur}
             onChange={handleChange}
-            value={values.remindertitle}
+            value={values.title}
           />
-            {errors.remindertitle && touched.remindertitle && <p className='font-bold text-red-500'>{errors.remindertitle}</p>}
+            {errors.title && touched.title && <p className='font-bold text-red-500'>{errors.title}</p>}
         </div>
-        <fieldset  className={errors.remindercontent && touched.remindercontent ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
+        <fieldset  className={errors.content && touched.content ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
           <legend className="text-lg tracking-wide">Content</legend>
           <input
             className="p-3 w-full "
             type="text"
-            name="remindercontent"
+            name="content"
             onBlur={handleBlur}
             onChange={handleChange}
-            value={values.remindercontent}
+            value={values.content}
           />
           <div className="absolute right-0 p-5 bg-[#00000022] -top-3 rounded-sm h-16">
             <TfiWrite className="text-custom-yellow text-2xl" />
           </div>
         </fieldset>
 
-        {errors.remindercontent && touched.remindercontent && <p className='font-bold text-red-500'>{errors.remindercontent}</p>}
+        {errors.content && touched.content && <p className='font-bold text-red-500'>{errors.content}</p>}
 
-        <fieldset className={errors.reminderprice && touched.reminderprice ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative' } >
+        <fieldset className={errors.price && touched.price ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative' } >
           <legend className="text-lg tracking-wide">Price</legend>
           <input
             className="p-3 w-full"
             type="text"
-            name="reminderprice"
+            name="price"
             onBlur={handleBlur}
             onChange={handleChange}
-            value={values.reminderprice}
+            value={values.price}
           />
           <div className="absolute right-0 p-5 bg-[#00000022] -top-3 rounded-sm h-16">
             <CiMoneyBill className="text-custom-yellow text-2xl" />
           </div>
         </fieldset>
-        {errors.reminderprice && touched.reminderprice && <p className='font-bold text-red-500'>{errors.reminderprice}</p>}
-        <fieldset className={errors.reminderdate && touched.reminderdate ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
+        {errors.price && touched.price && <p className='font-bold text-red-500'>{errors.price}</p>}
+        <fieldset className={errors.date && touched.date ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
           <legend className="text-lg tracking-wide">Date</legend>
           <input
             className="p-3 w-full"
             type="date"
-            name="reminderdate"
+            name="date"
             onBlur={handleBlur}
             onChange={handleChange}
-            value={values.reminderdate}
+            value={values.date}
           />
           <div className="absolute right-0 p-5 bg-[#00000022] -top-3 rounded-sm h-16">
             <BsCalendar2Date className="text-custom-yellow text-2xl" />
           </div>
         </fieldset>
-        {errors.reminderdate && touched.reminderdate && <p className='font-bold text-red-500'>{errors.reminderdate}</p>}
-        <p className="text-green-500 font-semibold" id="successRemind"></p>
-        <button disabled={isSubmitting} className="p-4 w-full text-white text-lg rounded-md rgb-add">
+        {errors.date && touched.date && <p className='font-bold text-red-500'>{errors.date}</p>}
+        <p className="text-green-500 font-semibold text-center w-full" id="successRemind">
+        {showSuccessText ? 'Submitted Successfully...'  : null}
+        </p>
+        <button type="submit" disabled={isSubmitting} className="p-4 w-full text-white text-lg rounded-md rgb-add">
           Save
         </button>
       </form>

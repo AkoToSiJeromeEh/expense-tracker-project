@@ -2,18 +2,20 @@ import { TbCategory } from 'react-icons/tb';
 import   {BsCalendar2Date } from 'react-icons/bs';
 import { useFormik } from 'formik';
 import {expenseSchema} from '../schemas'
+import  axios  from "axios";
 const Addexpense = () => {
 
-  const onSubmit = (actions) => {
-      actions.resetForm();
+  const onSubmit = async(values) => {
+     const response = await axios.post('http://localhost:3000/api/expenses/createExpense' , values)
+     console.log(response);
      console.log('submitted');
   }
   const {values , handleBlur , handleChange , handleSubmit , errors , touched , isSubmitting } = useFormik({
     initialValues: {
-      expenseId: '',
-      expenseAmount: '',
-      expenseCategory: '',
-      expenseDate: '',
+ 
+      expense:  "",
+      category: " ",
+      content : " ",
     },
     validationSchema : expenseSchema,
     onSubmit,
@@ -31,23 +33,23 @@ const Addexpense = () => {
         <div className="text-center w-full">
           <p className="text-4xl mb-5">Add Expenses</p>
           <input
-            className={errors.expenseAmount && touched.expenseAmount ?  'border-2 border-red-500 bg-white p-6 rounded-full w-64 add-exp-input text-center text-black' : 'bg-white p-6 rounded-full w-64 add-exp-input text-center text-black'}
-            type="text"
+            className={errors.expense && touched.expense ?  'border-2 border-red-500 bg-white p-6 rounded-full w-64 add-exp-input text-center text-black' : 'bg-white p-6 rounded-full w-64 add-exp-input text-center text-black'}
+            type="number"
             onChange={handleChange}
             onBlur={handleBlur}
-            value={values.expenseAmount}
+            value={values.expense}
             placeholder="0"
-            name="expenseAmount" 
+            name="expense" 
           />
-          {errors.expenseAmount && touched.expenseAmount && <p className='font-bold text-red-500'>{errors.expenseAmount}</p>}
+          {errors.expense && touched.expense && <p className='font-bold text-red-500'>{errors.expense}</p>}
         </div>
-        <fieldset className={errors.expenseDate && touched.expenseDate ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
+        <fieldset className={errors.category && touched.category ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
           <legend className="text-lg tracking-wide">Category</legend>
           <input
             className= 'p-3 w-full outline-none'
             type="text"
-            name="expenseCategory" 
-            value={values.expenseCategory}
+            name="category" 
+            value={values.category}
             onChange={handleChange}
             onBlur={handleBlur}   
           />
@@ -56,14 +58,14 @@ const Addexpense = () => {
             <TbCategory className='text-custom-yellow text-2xl' />
           </div>
         </fieldset>
-        {errors.expenseCategory && touched.expenseCategory && <p className='font-bold text-red-500'>{errors.expenseCategory}</p>}
-        <fieldset className={errors.expenseDate && touched.expenseDate ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
+        {errors.category && touched.category && <p className='font-bold text-red-500'>{errors.category}</p>}
+        <fieldset className={errors.content && touched.content ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
           <legend className="text-lg tracking-wide">Today</legend>
           <input
             className='p-3 w-full outline-none' 
-            type="date"
-            name="expenseDate"
-            value={values.expenseDate}
+            type="text"
+            name="content"
+            value={values.content}
             onChange={handleChange}
             onBlur={handleBlur}
           />
@@ -72,7 +74,7 @@ const Addexpense = () => {
             <BsCalendar2Date className='text-custom-yellow text-2xl' />
           </div>
         </fieldset>
-        {errors.expenseDate && touched.expenseDate && <p className='font-bold text-red-500'>{errors.expenseDate}</p>}
+        {errors.content && touched.content && <p className='font-bold text-red-500'>{errors.content}</p>}
         <p className="text-green-500 font-bold w-full text-center" id="successInsert"></p>
         <button disabled={isSubmitting}  type="submit" className="p-4 w-full add-exp-btn text-white text-lg rounded-md rgb-add">
           Save

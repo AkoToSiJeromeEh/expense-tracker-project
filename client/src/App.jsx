@@ -1,4 +1,5 @@
 import { BrowserRouter as NavigationWrapper, Route, Routes } from 'react-router-dom';
+import { QueryClientProvider , QueryClient  } from "react-query";
 import Home from './pages/Home';
 import Landing from './pages/Landing';
 import Signup from './pages/Signup';
@@ -12,8 +13,11 @@ import AddContent from './pages/AddContent';
 import { Page404 as PageNotFound } from './components/Page404';
 import './App.css';
 
+const queryClient = new QueryClient()
+
 function App() {
   return (
+    <QueryClientProvider client={queryClient}>
     <NavigationWrapper>
       <Routes>
         <Route path="/" element={<LandingLayout />}>
@@ -32,6 +36,7 @@ function App() {
       </Routes>
 
     </NavigationWrapper>
+    </QueryClientProvider>
   );
 }
 

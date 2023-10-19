@@ -3,18 +3,17 @@ import * as yup from "yup";
 
 export const expenseSchema = yup.object().shape({
 
-	expenseAmount : yup.number().positive().integer().required("Required."),
+	expenseAmount : yup.number().positive("Positive Number Only!").integer("Numbers Only!").required("Required."),
 	expenseCategory : yup.string().required("Required.") , 
 	expenseDate : yup.string().required("Required.") ,
 })
 
 export const reminderSchema = yup.object().shape({
-	remindertitle : yup.string().required("Required.") ,
-	remindercontent : yup.string().required("Required.") ,
-	reminderprice : yup.number().required("Required.") ,
-	reminderdate : yup.string().required("Required.")
+	title : yup.string().required("Required.") ,
+	content : yup.string().required("Required.") ,
+	price : yup.number().required("Required.").positive('Positive Number Only!').integer('Numbers Only!') ,
+  date : yup.string().required("Required.")
 });
-
 
 
 const passwordMatcher = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).*$/;

@@ -5,7 +5,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaHamburger } from "react-icons/fa";
 import { useState } from "react";
 import Chart from "../components/Chart";
-import { FaRegLightbulb } from "react-icons/fa";
+import {ExpenseList } from "../components/ExpenseList";
 const Home = () => {
   const [userData, setUserData] = useState({
     labels: ["Foods", "Travel", "Bills", "School", "Home"],
