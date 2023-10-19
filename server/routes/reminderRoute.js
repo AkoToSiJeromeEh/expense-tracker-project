@@ -16,6 +16,9 @@ router.route('/createReminder').post(createReminder)
 
 // update reminder
 router.route('/updateReminder/:id').patch(updateReminder)
+//@desc update reminder
+//@route GET /api/reminders/updateReminder/:id
+//@access public
 
 
 // delete reminder

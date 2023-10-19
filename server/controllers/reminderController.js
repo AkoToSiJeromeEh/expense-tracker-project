@@ -37,8 +37,18 @@ const createReminder = asyncHandler(async(req, res)=>{
 //@route GET /api/reminders/updateReminder/:id
 //@access public
 const updateReminder = asyncHandler(async(req, res)=>{
-    res.status(200).json({message: `update reminder for id:${req.params.id}`})
+    const reminder = await Reminder.findById(req.params.id)
+    if(!reminder){
+        res.status(404)
+        throw new Error("Reminder not found")
+    }
 
+    const updatedReminder = await Reminder.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {new: true}
+    )
+    res.status(200).json(updatedReminder)
 })
 
 
@@ -47,8 +57,14 @@ const updateReminder = asyncHandler(async(req, res)=>{
 //@route GET /api/reminders/deleteReminder
 //@access public
 const deleteReminder = asyncHandler(async(req, res)=>{
-    res.status(200).json({message: `delete reminder for id:${req.params.id}`})
+    const reminder = await Reminder.findById(req.params.id)
+    if(!reminder){
+        res.status(404)
+        throw new Error("Reminder not found")
+    }
 
+    await Reminder.deleteOne({_id: req.params.id})
+    res.status(200).json(reminder)
 })
 
 

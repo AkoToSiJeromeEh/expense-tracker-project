@@ -17,6 +17,7 @@ server.use(express.json()) //passer - to be able to receive the data from the cl
 
 // const reminderRoute = require('../server/routes/reminder-route')
 //middleware
+server.use("/api/expenses", require('./routes/expenseRoute'))
 server.use("/api/reminders", require('./routes/reminderRoute'))
 server.use(errorHandler)
 
