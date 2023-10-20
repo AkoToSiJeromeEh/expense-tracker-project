@@ -3,9 +3,9 @@ import * as yup from "yup";
 
 export const expenseSchema = yup.object().shape({
 
-	expenseAmount : yup.number().positive("Positive Number Only!").integer("Numbers Only!").required("Required."),
-	expenseCategory : yup.string().required("Required.") , 
-	expenseDate : yup.string().required("Required.") ,
+	expense : yup.number().positive("Positive Number Only!").integer("Numbers Only!").required("Required."),
+	category : yup.string().required("Required.") , 
+	date : yup.string().required("Required.") ,
 })
 
 export const reminderSchema = yup.object().shape({

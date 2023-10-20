@@ -153,7 +153,7 @@ const Home = () => {
               </div>
             </div>
             <div className="grid grid-cols-1 gap-4 h-[15vh] lg:w-[50rem] md:m-auto md:h-[25vh] w-full">
-              <div className=" shadow-custom-gray shadow-sm p-5 rounded-2xl  md:w-[90%] w-full  flex flex-row justify-between items-center h-fit ">
+              <div className=" shadow-custom-gray shadow-sm p-5 rounded-2xl  md:w-[70%] w-full  flex flex-row justify-between items-center h-fit ">
                 <div>
                   <div className="rgb-add rounded-full p-3 w-12 inline-block align-middle">
                     <FaHamburger className="w-10 text-2xl" />

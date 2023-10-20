@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import {FaHamburger} from 'react-icons/fa'
 export const ExpenseList = (props) => {
 
-	const {expense , content , categoru} = props
+	const {expense , date , category , deleteExpense} = props
   return (
 
 	<div className="bg-[#00000016]  rounded-t-xl w-full p-5 flex flex-row justify-between items-center h-fit gap-4 relative ">
@@ -11,17 +11,17 @@ export const ExpenseList = (props) => {
 		<FaHamburger className='w-10 text-2xl'/>
 	  </div>
 	  <div className="inline-block align-middle ms-2">
-		<p className="font-semibold">{categoru}</p>
+		<p className="font-semibold">{category}</p>
 	  </div>
 	</div>
 	<div className="text-end">
 	  <p className="font-bold">-{expense}</p>
-	  <span className="text-end font-normal text-sm text-secondary">{content}</span>
+	  <span className="text-end font-normal text-sm text-secondary">{new Date(date).toLocaleDateString()}</span>
 	</div>
 	<div className="absolute -bottom-16 z-20 right-0 left-0 w-full flex ">
-	  <a className="bg-red-500 rounded-b-x font-semiboldl   p-5 text-white w-full font-bold">
+	  <button onClick={() => deleteExpense()} className="bg-red-500 rounded-b-x font-semiboldl   p-5 text-white w-full font-bold">
 		Delete
-	  </a>
+	  </button>
 	</div>
   </div>
   )
@@ -30,7 +30,8 @@ export const ExpenseList = (props) => {
 
 ExpenseList.propTypes = {
 	expense: PropTypes.number,
-	categoru: PropTypes.string, 
-	content: PropTypes.string,
+	category: PropTypes.string, 
+	date: PropTypes.string,
+	deleteExpense : PropTypes.func
 	// deleteReminder: PropTypes.func,
 };
