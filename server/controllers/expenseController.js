@@ -15,8 +15,8 @@ const getExpenses = asyncHandler(async(req, res)=>{
 //@access public
 const createExpense = asyncHandler(async(req, res)=>{
     console.log(req.body);
-    const {expense, category, content} = req.body;
-    if(!expense || !category || !content){
+    const {expense, category, date} = req.body;
+    if(!expense || !category || !date){
         res.status(400);
         throw new Error("All fields are required")
     }
@@ -24,7 +24,7 @@ const createExpense = asyncHandler(async(req, res)=>{
     const expenses = await Expense.create({
         expense, 
         category, 
-        content
+        date
     })
     res.status(201).json({expenses})
 })

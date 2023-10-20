@@ -9,9 +9,9 @@ const expenseSchema = mongoose.Schema({
         type: String,
         required: [true, 'Add the category for expense']
     },
-    content: {
-        type: String,
-        required: [true, 'Add the content for expense']
+    date: {
+        type: Date,
+        required: [true, 'Add the date for expense']
     }
 }, {
     timestamps: true
