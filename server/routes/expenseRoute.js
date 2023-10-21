@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const router = express.Router();
 const {
@@ -7,6 +5,10 @@ const {
     createExpense,
     deleteExpense
 } = require('../controllers/expenseController')
+
+const validateToken = require('../middleware/verifyTokenHandler')
+
+router.use(validateToken);
 
 // get all Expenses
 router.route('/expenses').get(getExpenses)
@@ -19,3 +21,4 @@ router.route('/createExpense').post(createExpense)
 router.route('/deleteExpense/:id').delete(deleteExpense)
 
 module.exports = router;
+

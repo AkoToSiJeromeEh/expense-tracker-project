@@ -5,9 +5,10 @@ const Reminder = require('../model/reminderModel')
 //@route GET /api/reminders
 //@access public
 const getReminders = asyncHandler(async(req, res)=>{
-    const reminder = await Reminder.find()
+    const reminder = await Reminder.find({user_id: req.user.id})
     res.status(200).json(reminder)
 })
+
 
 
 
@@ -26,11 +27,20 @@ const createReminder = asyncHandler(async(req, res)=>{
         title,
         price,
         date,
-        content
+        content,
+        user_id: req.user.id
     })
     res.status(201).json({reminder})
 })
 
+const getSingleReminder = asyncHandler(async(req, res) => {
+    const reminder = await Reminder.findById(req.params.id)
+    if(!reminder){
+        res.status(404)
+        throw new Error("Reminder not found")
+    }
+    res.status(200).json(reminder)
+})
 
 
 //@desc update reminder
@@ -42,6 +52,12 @@ const updateReminder = asyncHandler(async(req, res)=>{
         res.status(404)
         throw new Error("Reminder not found")
     }
+
+    if(reminder.user_id.toString() !==  req.user.id){
+        res.status(403)
+        throw new Error("User don't have permission to update other user reminder")
+    }
+
 
     const updatedReminder = await Reminder.findByIdAndUpdate(
         req.params.id,
@@ -63,16 +79,21 @@ const deleteReminder = asyncHandler(async(req, res)=>{
         throw new Error("Reminder not found")
     }
 
+    if(reminder.user_id.toString() !==  req.user.id){
+        res.status(403)
+        throw new Error("User don't have permission to update other user reminder")
+    }
+
     await Reminder.deleteOne({_id: req.params.id})
     res.status(200).json(reminder)
 })
 
 
 
-
 module.exports = { 
     getReminders,
     createReminder,
+    getSingleReminder,
     updateReminder,
     deleteReminder
 }

@@ -5,7 +5,7 @@ const Expense = require('../model/expenseModel')
 //@route GET /api/expenses
 //@access public
 const getExpenses = asyncHandler(async(req, res)=>{
-    const expenses = await Expense.find()
+    const expenses = await Expense.find({user_id: req.user.id})
     res.status(200).json(expenses)
 })
 
@@ -24,10 +24,13 @@ const createExpense = asyncHandler(async(req, res)=>{
     const expenses = await Expense.create({
         expense, 
         category, 
-        date
+        date,
+        user_id: req.user.id
     })
     res.status(201).json({expenses})
 })
+
+
 
 //@desc delete expense
 //@route GET /api/expenses/deleteExpense
@@ -37,6 +40,12 @@ const deleteExpense = asyncHandler(async(req, res)=>{
     if(!expenses){
         res.status(404)
         throw new Error("Expense not found")
+    }
+
+    
+    if(expenses.user_id.toString() !==  req.user.id){
+        res.status(403)
+        throw new Error("User don't have permission to update other user reminder")
     }
 
     await Expense.deleteOne({_id: req.params.id})
@@ -50,3 +59,5 @@ module.exports = {
     createExpense,
     deleteExpense
 }
+
+
