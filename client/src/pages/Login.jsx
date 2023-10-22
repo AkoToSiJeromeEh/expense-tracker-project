@@ -1,12 +1,33 @@
+import React from "react";
 import { AiFillLock } from "react-icons/ai";
-import { FaUserLarge } from "react-icons/fa6";
+import { FaUser } from "react-icons/fa";
 import { useFormik } from "formik";
 import { loginSchema } from "../schemas";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { useAuth  } from "../hooks/auth/auth";
+
 const Login = () => {
-  const onSubmit = (actions) => {
-    actions.resetForm();
-    console.log("submitted");
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const onSubmit = async (values) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/users/login",
+        values
+      );
+      console.log(response);
+      auth.login(response.data.accessToken , values.username);
+      console.log(response);
+      navigate("/home");
+      console.log("submitted");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
+
   const {
     values,
     handleBlur,
@@ -23,6 +44,7 @@ const Login = () => {
     validationSchema: loginSchema,
     onSubmit,
   });
+
   return (
     <main className="login-container-main min-h-screen text-white grid grid-cols-1 place-content-around md:grid-cols-2 md:place-content-start md:gap-6 overflow-hidden ">
       <div className=" backdrop-blur-md h-[100vh] hidden md:block p-8 bg-[#0000003f]">
@@ -40,19 +62,27 @@ const Login = () => {
             Welcome To Expense Tracker
           </p>
           <p>
-            Don&apos;t have an account ? <strong>Create Now</strong>
+            Don&apos;t have an account ?{" "}
+            <Link to="/signup">
+              <strong>Create Now</strong>
+            </Link>
           </p>
         </div>
 
         <div>
           <form
-            action=""
             onSubmit={handleSubmit}
             method="post"
             className="flex flex-col gap-8 items-start justify-start w-full"
             id="form"
           >
-            <fieldset className={errors.username && touched.username ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
+            <fieldset
+              className={
+                errors.username && touched.username
+                  ? "border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative"
+                  : "border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative"
+              }
+            >
               <legend className="text-lg tracking-wide">Username</legend>
               <input
                 className="p-3 w-full  outline-none"
@@ -64,11 +94,21 @@ const Login = () => {
                 id="username"
               />
               <div className="absolute right-0 p-5  -top-3 rounded-sm h-16">
-                <FaUserLarge className="text-custom-yellow text-lg" />
+                <FaUser className="text-custom-yellow text-lg" />
               </div>
             </fieldset>
-            <p>{errors.username && touched.username && <p className='font-bold text-red-500'>{errors.username}</p>}</p>
-            <fieldset  className={errors.password && touched.password ? 'border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative' : 'border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative'}>
+            <p>
+              {errors.username && touched.username && (
+                <p className="font-bold text-red-500">{errors.username}</p>
+              )}
+            </p>
+            <fieldset
+              className={
+                errors.password && touched.password
+                  ? "border-2 border-red-500 w-full ps-2 pb-1 rounded-md text-start relative"
+                  : "border-2 border-[#c6b6fb] w-full ps-2 pb-1 rounded-md text-start relative"
+              }
+            >
               <legend className="text-lg tracking-wide">Password</legend>
               <input
                 className="p-3 w-full outline-none"
@@ -83,7 +123,11 @@ const Login = () => {
                 <AiFillLock className="text-custom-yellow text-2xl " />
               </div>
             </fieldset>
-            <p>{errors.password && touched.password && <p className='font-bold text-red-500'>{errors.password}</p>}</p>
+            <p>
+              {errors.password && touched.password && (
+                <p className="font-bold text-red-500">{errors.password}</p>
+              )}
+            </p>
 
             <button
               className="add-linear-bg-3 p-5 rounded-md w-full"
@@ -111,4 +155,5 @@ const Login = () => {
     </main>
   );
 };
+
 export default Login;

@@ -2,15 +2,18 @@ import { TbCategory } from 'react-icons/tb';
 import   {BsCalendar2Date } from 'react-icons/bs';
 import { useFormik } from 'formik';
 import {expenseSchema} from '../schemas'
+import Sucessmess from './Sucessmess';
 import ToggleState from '../hooks/ToggleState';
 import  axios  from "axios";
 const Addexpense = () => {
+  
   const [sucessExpense , setSucessExpense] = ToggleState()
-  const onSubmit = async(values) => {
+
+  const onSubmit = async(values , {resetForm}) => {
      const response = await axios.post('http://localhost:3000/api/expenses/createExpense' , values)
      setSucessExpense(true)
      setTimeout(() => {
-
+       resetForm()
        setSucessExpense(false)
      },2000)
      console.log(response);
@@ -31,6 +34,10 @@ const Addexpense = () => {
 
   return (
     <div className="self-start w-[70%] mx-auto">
+
+       {
+       sucessExpense && <Sucessmess success={sucessExpense} sucessMessage='Successfully Added'/>
+     }
       <form
         onSubmit={handleSubmit}
         method="post"
@@ -81,9 +88,6 @@ const Addexpense = () => {
           </div>
         </fieldset>
         {errors.date && touched.date && <p className='font-bold text-red-500'>{errors.date}</p>}
-        <p className="text-green-500 font-bold w-full text-center" id="successInsert">
-          {sucessExpense ? 'Successfully Added' : ''}
-        </p>
         <button disabled={isSubmitting}  type="submit" className="p-4 w-full add-exp-btn text-white text-lg rounded-md rgb-add">
           Save
         </button>

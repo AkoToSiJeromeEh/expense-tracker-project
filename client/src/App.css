@@ -103,6 +103,7 @@ button:disabled {
    opacity: 0.4;
    color : green;
 }
+
 @media (max-width: 700px) {
   .add-bg-radial,.add-bg-2{
 

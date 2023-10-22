@@ -5,15 +5,16 @@ import { CiMoneyBill } from "react-icons/ci";
 import { TfiWrite } from "react-icons/tfi";
 import  axios  from "axios";
 import ToggleState from "../hooks/ToggleState";
+import Sucessmess from './Sucessmess'
 
-//api/reminders/updateReminder/:id
 
 const Addreminder = () => {
   const [showSuccessText , setShowSuccessText] = ToggleState()
-  const onSubmit = async(values ) => {
+  const onSubmit = async(values , {resetForm} ) => {
     const response = await axios.post('http://localhost:3000/api/reminders/createReminder' , values);
     setShowSuccessText(true)
     setTimeout(() => {
+      resetForm();
       setShowSuccessText(false)
     }, 5000);
     console.log("submitted");
@@ -40,6 +41,10 @@ const Addreminder = () => {
   });
   return (
     <div className="self-start w-[70%] mx-auto">
+        {
+       showSuccessText && <Sucessmess success={showSuccessText} sucessMessage='Successfully Added'/>
+    }
+      
       <form
         onSubmit={handleSubmit}
         method="post"
@@ -106,9 +111,6 @@ const Addreminder = () => {
           </div>
         </fieldset>
         {errors.date && touched.date && <p className='font-bold text-red-500'>{errors.date}</p>}
-        <p className="text-green-500 font-semibold text-center w-full" id="successRemind">
-        {showSuccessText ? 'Submitted Successfully...'  : null}
-        </p>
         <button type="submit" disabled={isSubmitting} className="p-4 w-full text-white text-lg rounded-md rgb-add">
           Save
         </button>

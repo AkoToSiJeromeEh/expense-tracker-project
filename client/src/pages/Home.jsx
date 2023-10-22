@@ -1,18 +1,86 @@
-
 import cardImage from "../images/Rectangle 2.png";
+import { Link, useNavigate } from "react-router-dom";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaHamburger } from "react-icons/fa";
+import { FaSchool } from "react-icons/fa";
+import { PiAirplaneTiltFill } from "react-icons/pi";
+import { BiSolidCameraMovie } from "react-icons/bi";
+import { HiMiniHomeModern } from "react-icons/hi2";
+import { FaMoneyBill } from "react-icons/fa";
 import { useState } from "react";
 import Chart from "../components/Chart";
-import {ExpenseList } from "../components/ExpenseList";
+import { useAuth } from "../hooks/auth/auth";
+import {
+  useExpenses,
+  useIncome,
+  totalExpenses,
+  totalIncome,
+} from "../functions";
 const Home = () => {
+  const { expensesData } = useExpenses();
+  const incomeData = useIncome();
+
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  let totalExpense = totalExpenses(expensesData);
+  let totalIncomes = totalIncome(incomeData);
+  const totalBal = totalIncomes - totalExpense;
+
+  const Logout = () => {
+    auth.logout();
+    navigate("/");
+  };
+
+  const expenseDatas = expensesData?.data.map((expense) => {
+    return (
+      <div
+        className=" shadow-custom-gray shadow-sm p-5 rounded-2xl  md:w-[90%] w-full  flex flex-row justify-between items-center h-fit "
+        key={expense._id}
+      >
+        <div>
+          <div className="rgb-add rounded-full p-3 w-12 inline-block align-middle">
+            {expense.category == "Food" ? (
+              <FaHamburger className="w-10 text-2xl" />
+            ) : expense.category == "Travel" ? (
+              <PiAirplaneTiltFill className="w-10 text-2xl" />
+            ) : expense.category == "School" ? (
+              <FaSchool className="w-10 text-2xl" />
+            ) : expense.category == "Home" ? (
+              <HiMiniHomeModern className="w-10 text-2xl" />
+            ) : expense.category == "Bills" ? (
+              <FaMoneyBill className="w-10 text-2xl" />
+            ) : expense.category == " Entertainment" ? (
+              <BiSolidCameraMovie className="w-10 text-2xl" />
+            ) : (
+              ""
+            )}
+          </div>
+          <div className="inline-block align-middle ms-2">
+            <p className="font-extrabold" id="category">
+              {expense.category}
+            </p>
+          </div>
+        </div>
+        <div className="text-end">
+          <p className="font-semibold">-{expense.expense}</p>
+          <span className="text-end font-normal text-sm text-secondary">
+            {new Date(expense.date).toLocaleDateString()}
+          </span>
+        </div>
+      </div>
+    );
+  });
+
   const [userData, setUserData] = useState({
-    labels: ["Foods", "Travel", "Bills", "School", "Home"],
+    labels: expensesData?.data
+      ? expensesData.data.map((expense) => expense.category)
+      : [],
     datasets: [
       {
         label: "Expenses",
-        data: [100, 200, 500, 1000, 2000],
+        data: expensesData?.data.map((expense) => expense.expense),
         backgroundColor: (context) => {
           const gradient = context.chart.ctx.createLinearGradient(0, 0, 0, 200);
           gradient.addColorStop(0, "rgb(227, 131, 60)");
@@ -75,9 +143,8 @@ const Home = () => {
     },
   };
 
-
   return (
-    <div className="min-h-screen  text-white">
+    <div className="min-h-screen  text-white mb-[5rem]">
       <main className="flex flex-col gap-4 md:w-[75%] lg:w-[90%] m-auto">
         <section className="mt-5 p-5 md:p-0">
           <div className="flex flex-row justify-between md:w-4/5 md:m-auto">
@@ -92,11 +159,14 @@ const Home = () => {
                 <p className="text-sm text-custom-yellow font-extrabold">
                   Welcome!
                 </p>
-                <h2 className="inline-block font-bold">Mr Nobody</h2>
+                <h2 className="inline-block font-bold">{auth.username}</h2>
               </div>
             </div>
-            <button className="bg-add-linear-2 px-3 py-1 text-white rounded-full">
-              <a className="font-bold">Logout</a>
+            <button
+              className="bg-add-linear-2 px-3 py-1 text-white rounded-full"
+              onClick={Logout}
+            >
+              Logout
             </button>
           </div>
         </section>
@@ -107,7 +177,9 @@ const Home = () => {
                 <p className="font-extrabold md:text-2xl md:mb-4">
                   Total Balance
                 </p>
-                <h2 className="text-2xl font-extrabold md:text-4xl">$12050</h2>
+                <h2 className="text-2xl font-extrabold md:text-4xl">
+                  ${totalBal}
+                </h2>
               </div>
               <div className="flex flex- justify-between w-[90%] m-auto">
                 <div>
@@ -117,7 +189,7 @@ const Home = () => {
                       Income
                     </p>
                     <h2 className="inline-block font-bold" id="monthly-income">
-                      $20000
+                      ${totalIncomes}
                     </h2>
                   </div>
                 </div>
@@ -129,13 +201,12 @@ const Home = () => {
                       Expenses
                     </p>
                     <h2 className="inline-block font-bold" id="expenses">
-                      $15000
+                      {totalExpense !== " " ? `$${totalExpense}` : 0}
                     </h2>
                   </div>
                 </div>
               </div>
             </div>
-        
           </section>
 
           <Chart ChartData={userData} ChartOption={options} />
@@ -149,28 +220,16 @@ const Home = () => {
                 </h2>
               </div>
               <div>
-                <button className="text-custom-yellow">View All</button>
+                <Link
+                  className="text-custom-yellow font-semibold "
+                  to="expenseList"
+                >
+                  View All
+                </Link>
               </div>
             </div>
             <div className="grid grid-cols-1 gap-4 h-[15vh] lg:w-[50rem] md:m-auto md:h-[25vh] w-full">
-              <div className=" shadow-custom-gray shadow-sm p-5 rounded-2xl  md:w-[70%] w-full  flex flex-row justify-between items-center h-fit ">
-                <div>
-                  <div className="rgb-add rounded-full p-3 w-12 inline-block align-middle">
-                    <FaHamburger className="w-10 text-2xl" />
-                  </div>
-                  <div className="inline-block align-middle ms-2">
-                    <p className="font-extrabold" id="category">
-                      Food
-                    </p>
-                  </div>
-                </div>
-                <div className="text-end">
-                  <p className="font-semibold">-800</p>
-                  <span className="text-end font-normal text-sm text-secondary">
-                    02-22-2023
-                  </span>
-                </div>
-              </div>
+              {expenseDatas}
             </div>
           </section>
         </div>

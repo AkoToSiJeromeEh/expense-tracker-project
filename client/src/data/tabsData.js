@@ -9,5 +9,10 @@ export default [
         id: 2,
         title: "Reminder "
       },
+      {
+        name: 'tab-3',
+        id: 3,
+        title: "Income "
+      },
      
 ]

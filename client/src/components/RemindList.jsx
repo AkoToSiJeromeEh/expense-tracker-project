@@ -1,15 +1,19 @@
 import PropTypes from 'prop-types';
-import {BsPencilSquare} from 'react-icons/bs'
-const List = (props) => {
-	const {title , price , date , content , deleteReminder} = props
+import {Link } from 'react-router-dom'
+import {LuPencilLine} from 'react-icons/lu'
+import {RiDeleteBin6Fill} from 'react-icons/ri'
+const RemindList = (props) => {
+	const {id ,title , price , date , content , deleteReminder } = props
 	
   return (
 	<div className="bg-[#00000016] p-5 h-48 rounded-lg  relative overflow-y-auto">
 	<div className="flex flex-row justify-between gap-4">
 	  <h2 className="font-semibold">
-		<BsPencilSquare
-		  className="  text-2xl text-custom-yellow rounded-md inline-block me-2"
-		/>
+	
+		<Link 
+		  className="  text-2xl text-custom-yellow rounded-md inline-block me-2 cursor-pointer align-middle" to={`update/${id}`}> 
+		 <LuPencilLine className='align-middle'/>
+		</Link>
 		{title}
 	  </h2>
 	  <div>
@@ -22,17 +26,18 @@ const List = (props) => {
 		<p className="leading-6">{content }</p>
 	  </div>
 	  <div className="absolute -bottom-5 right-0 left-0 w-full flex flex-col">
-		<button onClick={() => deleteReminder()} className="bg-red-500  p-5 text-white w-full font-bold">
-		  Delete
-		</button>
+		<button onClick={() => deleteReminder()} className="bg-red-500 rounded-b-x  text-white w-full font-bold flex items-center justify-center p-5">
+		<RiDeleteBin6Fill className='text-2xl '/>
+	  </button>
 	  </div>
 	</div>
   </div>
   )
 }
 
-export default List
-List.propTypes = {
+export default RemindList
+RemindList.propTypes = {
+	id : PropTypes.string,
 	title: PropTypes.string,  
 	price: PropTypes.number,
 	date: PropTypes.string, 

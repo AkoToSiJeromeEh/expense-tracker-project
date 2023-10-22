@@ -24,7 +24,7 @@ export const loginSchema = yup.object().shape({
     .min(4, 'Username must be at least 4 characters'),
   password: yup.string()
     .required("Required")
-    .max(25)
+    .max(100)
     .min(4, 'Password must be at least 4 characters')
     .matches(passwordMatcher, "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character")
 });
@@ -35,12 +35,15 @@ export const signupSchema = yup.object().shape({
     .required("Required")
     .max(25, 'Username must be at most 25 characters')
     .min(4, 'Username must be at least 4 characters'),
-	income: yup.number()
-    .required("Required"),
 	password: yup.string()
     .required("Required")
     .max(25)
     .min(4, 'Password must be at least 4 characters')
     .matches(passwordMatcher, "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character")
 
+})
+
+export const incomeSchema = yup.object().shape({
+    
+   income :  yup.number().required("Required.").positive('Positive Number Only!').integer('Numbers Only!') ,
 })

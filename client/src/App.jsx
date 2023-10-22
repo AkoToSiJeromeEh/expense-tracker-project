@@ -11,13 +11,18 @@ import HomeLayout from './components/HomeLayout';
 import LandingLayout from './components/LandingLayout';
 import AddContent from './pages/AddContent';
 import { Page404 as PageNotFound } from './components/Page404';
+import UpdateReminder from './components/UpdateReminder'
+import PrivateRoutes from './hooks/private/PrivateRoutes';
+import { AuthProvider } from "./hooks/auth/auth";
 import './App.css';
+import 'animate.css';
 
 const queryClient = new QueryClient()
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+    <AuthProvider>
     <NavigationWrapper>
       <Routes>
         <Route path="/" element={<LandingLayout />}>
@@ -25,18 +30,22 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
         </Route>
-        <Route path="home" element={<HomeLayout />}>
-          <Route index element={<Home />} />
+        <Route element={<PrivateRoutes/>}>
+        <Route path="home"    element={<HomeLayout />}>
+          <Route  index element={<Home />} />
           <Route path="expenseStat" element={<ExpenseStat />} />
           <Route path='addexpense' element={<AddContent />} />
-          <Route path="expenseList" element={<ExpenseList />} />
+          <Route path="expenseList"  element={<ExpenseList />} />
+          <Route path='expenseList/update/:id'  element={<UpdateReminder/>} />
           <Route path="about" element={<About />} />
+        </Route>
         </Route>
         <Route path="*" element={<PageNotFound/>} />
       </Routes>
-
     </NavigationWrapper>
+    </AuthProvider>
     </QueryClientProvider>
+ 
   );
 }
 
