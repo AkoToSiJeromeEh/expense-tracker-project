@@ -6,9 +6,7 @@ const {
     deleteExpense
 } = require('../controllers/expenseController')
 
-const validateToken = require('../middleware/verifyTokenHandler')
 
-router.use(validateToken);
 
 // get all Expenses
 router.route('/expenses').get(getExpenses)

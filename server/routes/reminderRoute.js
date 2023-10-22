@@ -8,9 +8,6 @@ const {
     deleteReminder
 } = require('../controllers/reminderController')
 
-const validateToken = require('../middleware/verifyTokenHandler')
-
-router.use(validateToken)
 
 // get all reminders
 router.route('/').get(getReminders)

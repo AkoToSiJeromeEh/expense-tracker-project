@@ -5,7 +5,7 @@ const Expense = require('../model/expenseModel')
 //@route GET /api/expenses
 //@access public
 const getExpenses = asyncHandler(async(req, res)=>{
-    const expenses = await Expense.find({user_id: req.user.id})
+    const expenses = await Expense.find()
     res.status(200).json(expenses)
 })
 
@@ -25,7 +25,6 @@ const createExpense = asyncHandler(async(req, res)=>{
         expense, 
         category, 
         date,
-        user_id: req.user.id
     })
     res.status(201).json({expenses})
 })
@@ -43,11 +42,6 @@ const deleteExpense = asyncHandler(async(req, res)=>{
     }
 
     
-    if(expenses.user_id.toString() !==  req.user.id){
-        res.status(403)
-        throw new Error("User don't have permission to update other user reminder")
-    }
-
     await Expense.deleteOne({_id: req.params.id})
     res.status(200).json(expenses)
 })
