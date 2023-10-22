@@ -13,7 +13,7 @@ import AddContent from './pages/AddContent';
 import { Page404 as PageNotFound } from './components/Page404';
 import UpdateReminder from './components/UpdateReminder'
 import PrivateRoutes from './hooks/private/PrivateRoutes';
-import { AuthProvider } from "./hooks/auth/auth";
+import  {AuthProvider}  from './hooks/auth/auth';
 import './App.css';
 import 'animate.css';
 
@@ -21,8 +21,8 @@ const queryClient = new QueryClient()
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
     <AuthProvider>
+    <QueryClientProvider client={queryClient}>
     <NavigationWrapper>
       <Routes>
         <Route path="/" element={<LandingLayout />}>
@@ -43,8 +43,8 @@ function App() {
         <Route path="*" element={<PageNotFound/>} />
       </Routes>
     </NavigationWrapper>
-    </AuthProvider>
     </QueryClientProvider>
+    </AuthProvider>
  
   );
 }

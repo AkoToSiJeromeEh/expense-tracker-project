@@ -18,10 +18,12 @@ import {
   totalIncome,
 } from "../functions";
 const Home = () => {
+
+  const {username , logout} = useAuth()
   const { expensesData } = useExpenses();
   const incomeData = useIncome();
 
-  const auth = useAuth();
+
   const navigate = useNavigate();
 
   let totalExpense = totalExpenses(expensesData);
@@ -159,12 +161,12 @@ const Home = () => {
                 <p className="text-sm text-custom-yellow font-extrabold">
                   Welcome!
                 </p>
-                <h2 className="inline-block font-bold">{auth.username}</h2>
+                <h2 className="inline-block font-bold">{username}</h2>
               </div>
             </div>
             <button
               className="bg-add-linear-2 px-3 py-1 text-white rounded-full"
-              onClick={Logout}
+              onClick={() => logout()}
             >
               Logout
             </button>

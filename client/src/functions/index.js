@@ -3,6 +3,7 @@ import { fetchExpenseList , fetchReminderList , fetchIncome } from '../service';
 
 
 
+
 const useExpenses = () => {
   const {
     data: expensesData,
@@ -13,7 +14,7 @@ const useExpenses = () => {
     cacheTime: 5000,
     staleTime: 30000,
   });
-  console.log(expensesData);
+  
   return { expensesData, isExpensesFetching, refetchExpenses, isExpensesLoading };
 };
 

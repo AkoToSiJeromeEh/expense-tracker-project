@@ -69,7 +69,7 @@ const ExpenseStat = () => {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-4 md:grid-cols-1">
+          <div className="grid lg:grid-cols-1 gap-4 md:grid-cols-1">
             <div className="flex flex-col gap-10 c-card   rounded-md p-5">
               <div>
                 <h2 className="text-2xl font-semibold text-white ">Top Spending</h2>
@@ -86,17 +86,6 @@ const ExpenseStat = () => {
                     )
                   })
                 }
-              </div>
-            </div>
-            <div className="flex flex-col gap-10 c-card   rounded-md p-5">
-              <div>
-                <h2 className="text-2xl font-semibold text-white ">Newest Spending</h2>
-              </div>
-              <div className="grid grid-cols-1 gap-4 h-[15vh] lg:w-full md:m-auto md:h-[25vh] w-full overflow-y-auto place-content-start">
-             {
-          
-
-             }
               </div>
             </div>
           </div>

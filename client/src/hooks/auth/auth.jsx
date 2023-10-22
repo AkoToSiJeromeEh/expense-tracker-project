@@ -1,44 +1,26 @@
-import React, { useState, createContext, useContext, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import React, { useState, createContext, useContext, useMemo } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem('accessToken'));
-  const [username, setUsername] = useState(localStorage.getItem('username'));
+ 
+  const [username, setUsername] = useState();
 
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-   
-  
-    } else {
-      delete axios.defaults.headers.common['Authorization'];
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('username');
-    }
-  }, [token]);
-
-  const login = (token, username) => {
-    setToken(token);
+  const login = (username) => {
     setUsername(username);
-    localStorage.setItem('username', username);
-    localStorage.setItem('accessToken', token);
   };
 
   const logout = () => {
-    setToken(null);
     setUsername(null);
   };
 
   const contextValue = useMemo(
     () => ({
       username,
-      token,
       login,
       logout,
     }),
-    [token]
+    [username]
   );
 
   return (

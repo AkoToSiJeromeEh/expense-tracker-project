@@ -5,7 +5,7 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 import RemindList from "../components/RemindList";
 import ToggleState from "../hooks/ToggleState";
 import {useExpenses , useReminder} from '../functions'
-import Expenselist  from '../components/Expenselist'
+import Expense from "../components/Expense";
 import Successmess from '../components/Sucessmess'
 
 
@@ -82,7 +82,7 @@ const ExpenseList = () => {
                   {expensesData?.data.map((expense) => {
                     return (
                       <div key={expense._id}>
-                        <Expenselist
+                        <Expense
                           expense={expense.expense}
                           date={expense.date}
                           category={expense.category}
@@ -120,6 +120,7 @@ const ExpenseList = () => {
                         id={reminder._id}
                       />
                     </div>
+                    
                   );
                 })}
               </div>

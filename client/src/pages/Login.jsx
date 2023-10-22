@@ -1,16 +1,21 @@
 import React from "react";
-import { AiFillLock } from "react-icons/ai";
+import { AiFillEyeInvisible } from "react-icons/ai";
+import { GiAllSeeingEye } from "react-icons/gi";
 import { FaUser } from "react-icons/fa";
 import { useFormik } from "formik";
 import { loginSchema } from "../schemas";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useAuth  } from "../hooks/auth/auth";
-
+import { useAuth } from "../hooks/auth/auth";
+import { useState } from "react";
+import ToggleState from "../hooks/ToggleState";
 const Login = () => {
-  const auth = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState();
+  const { login } = useAuth();
+
+  const [showPass, setShowPass] = ToggleState();
 
   const onSubmit = async (values) => {
     try {
@@ -18,12 +23,11 @@ const Login = () => {
         "http://localhost:3000/api/users/login",
         values
       );
-      console.log(response);
-      auth.login(response.data.accessToken , values.username);
+      login(values.username);
       console.log(response);
       navigate("/home");
-      console.log("submitted");
     } catch (error) {
+      setError(error.response.data.msg);
       console.error("Error:", error);
     }
   };
@@ -94,7 +98,7 @@ const Login = () => {
                 id="username"
               />
               <div className="absolute right-0 p-5  -top-3 rounded-sm h-16">
-                <FaUser className="text-custom-yellow text-lg" />
+                <FaUser className="text-custom-yellow text-2xl" />
               </div>
             </fieldset>
             <p>
@@ -112,7 +116,7 @@ const Login = () => {
               <legend className="text-lg tracking-wide">Password</legend>
               <input
                 className="p-3 w-full outline-none"
-                type="password"
+                type={showPass ? "text" : "password"}
                 name="password"
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -120,13 +124,27 @@ const Login = () => {
                 id="password"
               />
               <div className="absolute right-0 p-5 -top-3 rounded-sm h-16  ">
-                <AiFillLock className="text-custom-yellow text-2xl " />
+                {showPass ? (
+                  <GiAllSeeingEye
+                    className="text-custom-yellow text-4xl cursor-pointer "
+                    onClick={() => setShowPass((preval) => !preval)}
+                  />
+                ) : (
+                  <AiFillEyeInvisible
+                    className="text-custom-yellow text-4xl cursor-pointer "
+                    onClick={() => setShowPass((preval) => !preval)}
+                  />
+                )}
               </div>
             </fieldset>
             <p>
               {errors.password && touched.password && (
                 <p className="font-bold text-red-500">{errors.password}</p>
               )}
+            </p>
+
+            <p className="text-md text-red-500 font-bold w-full text-center">
+              {error}
             </p>
 
             <button
